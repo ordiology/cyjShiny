@@ -1,6 +1,7 @@
 library(shiny)
 library(cyjShiny)
 library(htmlwidgets)
+library(R.utils)
 #----------------------------------------------------------------------------------------------------
 # one way to create a graph is via the Bioconductor graphNEL class.
 # here we use the data.frame strategy.
