@@ -87270,11 +87270,13 @@ HTMLWidgets.widget({
 			if (style != null) {
 				cyj.style(style.json);
 			}
-			log("small cyjs network ready, with " + cyj.nodes().length + " nodes.");
+			// log("small cyjs network ready, with " + cyj.nodes().length + " nodes.");
 		        // log("  initial widget dimensions: " +
             //                $("#cyjShiny").width() + ", " +
             //                $("#cyjShiny").height());
 
+      // Send a message to Shiny to say the network is ready
+		  Shiny.setInputValue("networkReady", "network change", {priority: "event"});
 			cyj.nodes().map(function(node){node.data({degree: node.degree()})});
 			//setTimeout(function() {
 			//    cyj.fit(10)
@@ -87299,7 +87301,11 @@ if(HTMLWidgets.shinyMode) Shiny.addCustomMessageHandler("doLayout", function(mes
 
     var strategy = message.strategy;
     self.cyj.layout({name: strategy}).run()
-    })
+      // Send a message to Shiny to say the network is ready
+    Shiny.setInputValue("networkReady", "network change", {priority: "event"});
+
+})
+    
 
 //------------------------------------------------------------------------------------------------------------------------
 if(HTMLWidgets.shinyMode) Shiny.addCustomMessageHandler("getNodePositions", function(message){
@@ -87349,6 +87355,7 @@ if(HTMLWidgets.shinyMode) Shiny.addCustomMessageHandler("redraw", function(messa
 
     // log("redraw requested");
     self.cyj.style().update();
+    
     })
 
 //------------------------------------------------------------------------------------------------------------------------
@@ -87365,6 +87372,9 @@ if(HTMLWidgets.shinyMode) Shiny.addCustomMessageHandler("setNodeAttributes", fun
        var node = self.cyj.getElementById(id);
        node.data({[attributeName]:  newValue});
        };
+      // Send a message to Shiny to say the network is ready
+      Shiny.setInputValue("networkReady", "network change", {priority: "event"});
+
 })
 //------------------------------------------------------------------------------------------------------------------------
 if(HTMLWidgets.shinyMode) Shiny.addCustomMessageHandler("setEdgeAttributes", function(message){
@@ -87387,6 +87397,9 @@ if(HTMLWidgets.shinyMode) Shiny.addCustomMessageHandler("setEdgeAttributes", fun
          edge.data({[attributeName]: values[i]})
          }
       } // for i
+      
+      // Send a message to Shiny to say the network is ready
+      Shiny.setInputValue("networkReady", "network change", {priority: "event"});
 
 }) // setEdgeAttributes
 //----------------------------------------------------------------------------------------------------
